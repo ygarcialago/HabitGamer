@@ -31,3 +31,5 @@ nyc_output/
 Thumbs.db
 
 tsconfig.tsbuildinfo
+
+generated
