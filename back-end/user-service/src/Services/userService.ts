@@ -3,6 +3,7 @@ import type { LoginUserDTO } from "../DTO/loginUser.dto.js";
 import { User } from "../Models/User.js";
 import { UserRepository } from "../Repository/userRepository.js";
 import { hashPassword, checkPassword } from "../Utils/hashedPasswordUtils.js";
+import { generateToken, type UserPayload } from "../Utils/jwtUtils.js";
 
 export class UserService {
     constructor(private repo: UserRepository) { }
@@ -17,14 +18,20 @@ export class UserService {
         return this.repo.save(user);
     }
 
-    async login(data: LoginUserDTO): Promise<User | null> {
+    async login(data: LoginUserDTO): Promise<string | null> {
         const {email, plainPassword} = data 
         const user = await this.repo.findByEmail(email);
         if (!user) return null;
 
         const valid = await checkPassword(plainPassword, user.password);
         if (!valid) return null;
-
-        return user;
+        
+        const payload: UserPayload = {
+            id: user.id!,
+            nameApp: user.nameApp
+        }
+        
+        return generateToken(payload)
+        
     }
 }

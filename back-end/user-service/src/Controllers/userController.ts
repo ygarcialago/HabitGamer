@@ -24,11 +24,11 @@ export class UserController {
     static async login(req: Request, res: Response) {
         try {
             const requestData: LoginUserDTO = req.body;
-            const user = await service.login(requestData);
+            const token = await service.login(requestData);
 
-            if (!user) return res.status(401).json({ error: "Credenciales incorrectas" });
+            if (!token) return res.status(401).json({ error: "Credenciales incorrectas" });
 
-            res.json({ id: user.id, email: user.email, name: user.nameApp });
+            res.json({token});
         } catch (e: any) {
             res.status(500).json({ error: e.message });
         }
