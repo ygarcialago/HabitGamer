@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import { UserService } from "../Services/userService.js";
 import { UserRepository } from "../Repository/userRepository.js";
+import type { CreateUserDTO } from "../DTO/createUser.dto.js";
+import type { LoginUserDTO } from "../DTO/loginUser.dto.js";
 
 const repo = new UserRepository();
 const service = new UserService(repo);
@@ -8,8 +10,8 @@ const service = new UserService(repo);
 export class UserController {
     static async save(req: Request, res: Response) {
         try {
-            const { nameApp ,email, password } = req.body;
-            const user = await service.createUser(nameApp, email, password);
+            const requestData: CreateUserDTO = req.body;
+            const user = await service.createUser(requestData);
 
             if (!user) return res.status(301).json({ error: "Fallo al guardar usuario" });
 
@@ -18,11 +20,11 @@ export class UserController {
             res.status(500).json({ error: e.message });
         }
     }
-    
+
     static async login(req: Request, res: Response) {
         try {
-            const { email, password } = req.body;
-            const user = await service.login(email, password);
+            const requestData: LoginUserDTO = req.body;
+            const user = await service.login(requestData);
 
             if (!user) return res.status(401).json({ error: "Credenciales incorrectas" });
 
