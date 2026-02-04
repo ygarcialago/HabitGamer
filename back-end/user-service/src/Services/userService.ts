@@ -1,3 +1,5 @@
+import type { CreateUserDTO } from "../DTO/createUser.dto.js";
+import type { LoginUserDTO } from "../DTO/loginUser.dto.js";
 import { User } from "../Models/User.js";
 import { UserRepository } from "../Repository/userRepository.js";
 import { hashPassword, checkPassword } from "../Utils/hashedPasswordUtils.js";
@@ -5,7 +7,8 @@ import { hashPassword, checkPassword } from "../Utils/hashedPasswordUtils.js";
 export class UserService {
     constructor(private repo: UserRepository) { }
 
-    async createUser(name: string, email: string, password: string): Promise<User> {
+    async createUser(data: CreateUserDTO): Promise<User> {
+        const { name, email, password } = data
         const exists = await this.repo.findByEmail(email);
         if (exists) throw new Error("Email already in use");
 
@@ -14,13 +17,14 @@ export class UserService {
         return this.repo.save(user);
     }
 
-    async login(email: string, plainPassword: string): Promise<User | null> {
-    const user = await this.repo.findByEmail(email);
-    if (!user) return null;
+    async login(data: LoginUserDTO): Promise<User | null> {
+        const {email, plainPassword} = data 
+        const user = await this.repo.findByEmail(email);
+        if (!user) return null;
 
-    const valid = await checkPassword(plainPassword, user.password);
-    if (!valid) return null;
+        const valid = await checkPassword(plainPassword, user.password);
+        if (!valid) return null;
 
-    return user;
-  }
+        return user;
+    }
 }
