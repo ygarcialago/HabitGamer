@@ -20,4 +20,11 @@ export class UserRepository {
 
         return new User(u.nameApp, u.email, u.password, u.id);
     }
+
+    async findByName(nameApp: string): Promise<User | null> {
+        const u = await prisma.user.findUnique({ where: { nameApp } });
+        if (!u) return null;
+
+        return new User(u.nameApp, u.email, u.password, u.id);
+    }
 }

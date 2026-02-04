@@ -10,8 +10,11 @@ export class UserService {
 
     async createUser(data: CreateUserDTO): Promise<User> {
         const { name, email, password } = data
-        const exists = await this.repo.findByEmail(email);
-        if (exists) throw new Error("Email already in use");
+        const existsEmail = await this.repo.findByEmail(email);
+        if (existsEmail) throw new Error("Email already in use");
+
+        const existsName = await this.repo.findByName(name);
+        if (existsName) throw new Error("Name already in use")
 
         const hashedPassword = await hashPassword(password)
         const user = new User(name, email, hashedPassword);
