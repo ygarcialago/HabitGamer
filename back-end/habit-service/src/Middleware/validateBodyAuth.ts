@@ -3,7 +3,7 @@ import type { z } from "zod";
 import { ZodError } from "zod";
 import { verifyToken } from "../Utils/jwtUtils.js";
 
-export const authenticateAndValidate = <T extends z.ZodAny>(
+export const authenticateAndValidate = <T extends z.ZodTypeAny>(
     bodySchema?: T
 ) => {
     return (req: Request, res: Response, next: NextFunction) => {
