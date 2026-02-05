@@ -3,6 +3,7 @@ import {
     HabitFrequency,
     HabitImpact,
 } from "../Enum/habits.enum.js";
+import { mapHabitKind, mapHabitFrequency, mapHabitImpact } from "../Utils/enumUtils.js";
 
 export type CreateHabitProps = {
     userId: number;
@@ -43,6 +44,22 @@ export class Habit {
             props.isActive,
             null,
             null
+        );
+    }
+
+    static fromPersistence(data: any): Habit {
+        return new Habit(
+            data.id,
+            data.userId,
+            data.name,
+            data.description,
+            mapHabitKind(data.kind),
+            mapHabitFrequency(data.frequency),
+            mapHabitImpact(data.impact),
+            data.value,
+            data.isActive,
+            data.createdAt,
+            data.updatedAt
         );
     }
 
