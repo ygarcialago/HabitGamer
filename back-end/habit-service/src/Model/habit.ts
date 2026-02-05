@@ -6,7 +6,7 @@ import {
 
 
 export class Habit {
-    private constructor(
+    constructor(
         public readonly id: string | null,
         public readonly userId: number,
         public name: string,
