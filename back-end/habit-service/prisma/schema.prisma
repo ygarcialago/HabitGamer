@@ -13,6 +13,21 @@ datasource db {
   provider = "postgresql"
 }
 
+enum HabitKind {
+  GOOD
+  BAD
+}
+
+enum HabitFrequency {
+  DAILY
+  WEEKLY
+}
+
+enum HabitImpact {
+  XP
+  LIFE
+}
+
 model Habit {
   id          String          @id @default(uuid())
   userId      Int
