@@ -10,7 +10,7 @@ export class HabitController {
     static async save(req: Request, res: Response) {
         try {
             const requestData: CreateHabitDTO = req.body;
-            const habit = await service.createUser(requestData);
+            const habit = await service.createHabit(requestData);
 
             if (!habit) return res.status(301).json({ error: "Fallo al guardar hábito" });
 
