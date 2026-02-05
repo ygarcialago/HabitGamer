@@ -24,4 +24,8 @@ export class HabitService {
 
         return this.repo.save(habit)
     }
+
+    async save(params:type) {
+        
+    }
 }
