@@ -44,5 +44,22 @@ model Habit {
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
+  logs HabitLog[]
+
   @@index([userId])
+}
+
+model HabitLog {
+  id        String   @id @default(uuid())
+  habitId   String
+  userId    Int
+  date      DateTime      // fecha exacta del check-in
+  completed Boolean       // true = cumplido, false = no cumplido
+  createdAt DateTime      @default(now())
+
+  habit Habit @relation(fields: [habitId], references: [id])
+
+  @@index([habitId])
+  @@index([userId])
+  @@unique([habitId, date]) // solo un registro por día por hábito
 }
