@@ -10,7 +10,7 @@ export class HabitService {
 
     async createHabit(data: CreateHabitDTO): Promise<Habit> {
         const { name, userId, description, kind, frequency, impact, value, isActive } = data;
-        
+
         const props: CreateHabitProps = {
             userId: userId,
             name: name,
@@ -20,19 +20,23 @@ export class HabitService {
             value: value,
             description: description ?? "",
             isActive: isActive
-        } 
+        }
         const habit = Habit.create(props);
 
         return this.repo.save(habit)
     }
 
-    async changeActiveness (data: changeActivenessHabitDTO): Promise<Habit> {
+    async changeActiveness(data: changeActivenessHabitDTO): Promise<Habit> {
         const { id, isActive } = data
-        
-        let habit : Habit | null = await this.repo.findById(id);
-        if(!habit) throw new Error("Id inválido");
+
+        let habit: Habit | null = await this.repo.findById(id);
+        if (!habit) throw new Error("Id inválido");
 
         habit = await this.repo.updateIsActive(habit.id!, isActive)
         return habit;
+    }
+
+    async getUserHabits(userId: number): Promise<Habit[]> {
+        return this.repo.findByUserId(userId);
     }
 }

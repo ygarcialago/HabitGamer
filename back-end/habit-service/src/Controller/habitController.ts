@@ -59,4 +59,21 @@ export class HabitController {
             res.status(500).json({ error: e.message });
         }
     }
+
+    // GET /users/:userId/habits
+    static async getUserHabits(req: Request, res: Response) {
+        try {
+            const userId = Number(req.params.userId);
+            if (!userId) {
+                return res.status(400).json({ success: false, message: "userId inválido" });
+            }
+
+            const habits = await service.getUserHabits(userId);
+            res.status(200).json({
+                habits,
+            });
+        } catch (err: any) {
+            res.status(500).json({ success: false, message: err.message });
+        }
+    }
 }
