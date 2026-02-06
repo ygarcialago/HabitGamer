@@ -46,12 +46,20 @@ export class HabitRepository {
   }
 
   async updateIsActive(id: string, isActive: boolean): Promise<Habit> {
-  const updated = await prisma.habit.update({
-    where: { id },
-    data: { isActive },
-  });
+    const updated = await prisma.habit.update({
+      where: { id },
+      data: { isActive },
+    });
 
-  return Habit.fromPersistence(updated);
-}
+    return Habit.fromPersistence(updated);
+  }
 
+  async findByUserId(userId: number): Promise<Habit[]> {
+    const data = await prisma.habit.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    return data.map(Habit.fromPersistence);
+  }
 }
