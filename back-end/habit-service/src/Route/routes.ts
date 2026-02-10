@@ -13,5 +13,8 @@ route.patch("/changeActivity", authenticateAndValidate(changeActivenessHabitSche
 
 route.post("/:habitId/mark", HabitLogController.markHabit)
 route.get("/:habitId/streak", HabitLogController.getStreak)
+route.post("/:habitId/unmark", HabitLogController.unmarkHabit);
+route.post("/:habitId/undo", HabitLogController.undoLastCheck);
+
 
 export default route;

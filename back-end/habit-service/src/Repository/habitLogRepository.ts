@@ -36,4 +36,11 @@ export class HabitLogRepository {
       orderBy: { date: 'asc' },
     }).then(logs => logs.map(HabitLog.fromPersistence));
   }
+
+  async delete(logId: string): Promise<void> {
+    await prisma.habitLog.delete({
+      where: { id: logId },
+    });
+  }
+
 }
