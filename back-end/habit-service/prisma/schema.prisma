@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum HabitKind {
+  GOOD
+  BAD
+}
+
+enum HabitFrequency {
+  DAILY
+  WEEKLY
+}
+
+enum HabitImpact {
+  XP
+  LIFE
+}
+
+model Habit {
+  id          String          @id @default(uuid())
+  userId      Int
+  name        String
+  description String?
+
+  kind        HabitKind       // GOOD / BAD
+  frequency   HabitFrequency  // DAILY / WEEKLY
+  impact      HabitImpact     // XP / LIFE
+
+  value       Int             // +XP o -vida
+  isActive    Boolean         @default(true)
+
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  logs HabitLog[]
+
+  @@index([userId])
+}
+
+model HabitLog {
+  id        String   @id @default(uuid())
+  habitId   String
+  userId    Int
+  date      DateTime      // fecha exacta del check-in
+  completed Boolean       // true = cumplido, false = no cumplido
+  createdAt DateTime      @default(now())
+
+  habit Habit @relation(fields: [habitId], references: [id])
+
+  @@index([habitId])
+  @@index([userId])
+  @@unique([habitId, date]) // solo un registro por día por hábito
+}
