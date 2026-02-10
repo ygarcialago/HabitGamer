@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum PlayerType {
+  KNIGHT
+  ELF
+  DWARF
+  MAGICIAN
+  ROGUE
+  PALADIN
+  RANGER
+  CLERIC
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model Player {
+  id        String      @id @default(uuid())
+  id_user   String      @unique
+
+  xp        Int         @default(0)
+  level     Int         @default(1)
+  life      Int         @default(100)
+  isDead    Boolean     @default(false)
+
+  title     String?
+  type   PlayerType @default(KNIGHT)
+  gender Gender     @default(MALE)
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@map("player")
+}
