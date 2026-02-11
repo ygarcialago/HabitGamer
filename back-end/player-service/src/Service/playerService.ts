@@ -9,7 +9,7 @@ interface CreatePlayerDTO {
 }
 
 export class PlayerService {
-  constructor(private playerRepository: PlayerRepository) {}
+  constructor(private playerRepository: PlayerRepository) { }
 
   async createPlayer(data: CreatePlayerDTO): Promise<Player> {
 
@@ -20,6 +20,52 @@ export class PlayerService {
     }
 
     return this.playerRepository.createPlayer(data);
+  }
+
+  async addExperience(playerId: string, amount: number): Promise<Player> {
+    if (amount <= 0) {
+      throw new Error("Experience amount must be greater than 0");
+    }
+
+    const player = await this.playerRepository.getById(playerId);
+    if (!player) throw new Error("Player not found");
+
+    let newXp = player.xp + amount;
+    let newLevel = player.level;
+
+    const xpToLevelUp = player.level * 100;
+
+    if (newXp >= xpToLevelUp) {
+      newLevel += 1;
+      newXp = newXp - xpToLevelUp;
+    }
+
+    return this.playerRepository.update(playerId, {
+      xp: newXp,
+      level: newLevel,
+    });
+  }
+
+  async takeDamage(playerId: string, damage: number): Promise<Player> {
+    if (damage <= 0) {
+      throw new Error("Damage must be greater than 0");
+    }
+
+    const player = await this.playerRepository.getById(playerId);
+    if (!player) throw new Error("Player not found");
+
+    let newLife = player.life - damage;
+    let isDead = player.isDead;
+
+    if (newLife <= 0) {
+      newLife = 0;
+      isDead = true;
+    }
+
+    return this.playerRepository.update(playerId, {
+      life: newLife,
+      isDead,
+    });
   }
 
 }

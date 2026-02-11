@@ -35,4 +35,18 @@ export class PlayerRepository {
       where: { id_user },
     });
   }
+
+  async getById(id: string) {
+    return prisma.player.findUnique({
+      where: { id },
+    });
+  }
+
+  async update(id: string, data: Partial<Player>) {
+    return prisma.player.update({
+      where: { id },
+      data,
+    });
+  }
+  
 }

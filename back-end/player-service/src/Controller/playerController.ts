@@ -10,7 +10,6 @@ export class PlayerController {
     try {
       const { id_user, type, gender, title } = req.body;
 
-      // Validación básica
       if (!id_user || !type || !gender) {
         return res.status(400).json({
           message: "id_user, type and gender are required",
@@ -32,4 +31,43 @@ export class PlayerController {
       });
     }
   }
+
+  static async addExperience(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { amount } = req.body;
+
+      if (!id || Array.isArray(id)) {
+        return res.status(400).json({
+          message: "Invalid player id",
+        });
+      }
+
+      const player = await playerService.addExperience(id, amount);
+
+      return res.status(200).json(player);
+    } catch (error: any) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+
+  static async takeDamage(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { damage } = req.body;
+
+      if (!id || Array.isArray(id)) {
+        return res.status(400).json({
+          message: "Invalid player id",
+        });
+      }
+
+      const player = await playerService.takeDamage(id, damage);
+
+      return res.status(200).json(player);
+    } catch (error: any) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+
 }
