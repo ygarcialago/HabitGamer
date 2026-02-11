@@ -70,4 +70,44 @@ export class PlayerController {
     }
   }
 
+  static async revive(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      if (!id || Array.isArray(id)) {
+        return res.status(400).json({ message: "Invalid player id" });
+      }
+
+      const player = await playerService.revive(id);
+      return res.status(200).json(player);
+
+    } catch (error: any) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+
+
+  static async reroll(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { type, gender, title } = req.body;
+
+      if (!id || Array.isArray(id)) {
+        return res.status(400).json({ message: "Invalid player id" });
+      }
+
+      const player = await playerService.reroll(
+        id,
+        type,
+        gender,
+        title
+      );
+
+      return res.status(200).json(player);
+
+    } catch (error: any) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+
 }

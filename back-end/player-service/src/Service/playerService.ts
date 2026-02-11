@@ -68,4 +68,36 @@ export class PlayerService {
     });
   }
 
+  async revive(playerId: string) {
+    const player = await this.playerRepository.getById(playerId);
+    if (!player) throw new Error("Player not found");
+
+    if (!player.isDead) {
+      throw new Error("Player is not dead");
+    }
+
+    return this.playerRepository.update(playerId, {
+      xp: 0,
+      level: 1,
+      life: 100,
+      isDead: false,
+    });
+  }
+  
+  async reroll(
+    playerId: string,
+    type: PlayerType,
+    gender: Gender,
+    title?: string
+  ) {
+    const player = await this.playerRepository.getById(playerId);
+    if (!player) throw new Error("Player not found");
+
+    return this.playerRepository.update(playerId, {
+      type,
+      gender,
+      title: title ?? null,
+    });
+  }
+
 }
