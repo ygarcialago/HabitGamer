@@ -33,3 +33,4 @@ Thumbs.db
 tsconfig.tsbuildinfo
 
 generated
+back-end/player-service/public/avatars
