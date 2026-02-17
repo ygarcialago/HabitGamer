@@ -21,11 +21,14 @@ app.use(
   })
 );
 
-/*app.use("/avatars", express.static("public/avatars", {
-  maxAge: "30d",
-  immutable: true
-}));
+/*
+Producción:
+app.use(
+  "/avatars",
+  express.static(path.join(__dirname, "../public/avatars"))
+);
 */
+
 app.listen(port, () => {
     console.log(`Microservicio iniciado en el puerto ${port}`)
 })
